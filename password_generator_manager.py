@@ -6,12 +6,13 @@ Created on Wed Feb  3 22:05:42 2021
 """
 
 import random
-# import keyring
+import csv
+from cryptography.fernet import fernet
 
 print ("Welcome to my password generator and manager!")
 userChoice = input("Press 1 to generate a password, press 2 to add a new account, press 3 to remove an account, press 4 to look up an existing account, or press 5 to exit: ")
 
-#1
+#1) Generate a new password
 def newPassword():
     uppercaseLetter1 = chr(random.randint(65,90))   
     lowercaseLetter2 = chr(random.randint(97,122)) 
@@ -30,26 +31,27 @@ def newPassword():
     finalPassword = random.shuffle(passwordLinked)    
     print('Your new password is: ',finalPassword)
 
-#2    
+#2) Create an entry for a new account and write it to a csv file
 def addAccount():
-    account = input("Account Title: ")
-    username = input("Username: ")
-    password = input("Password: ")
+    with open('my_account_list.csv', 'a') as f:
+        w = csv.writer(f, quoting=csv.QUOTE_ALL) 
+    while (1):
+        account = input("Account Title: ")
+        username = input("Username: ")
+        password = input("Password: ")
+        w.writerow([account, username, password])
+    
+# Encrypt this csv file
 
-#3
+#3) Delete an existing account
 def delAccount():
     deleteChoice = input("What account do you want to delete?: ")
 
-#4
+#4) Search for an existing account so the user can see their info
 def search():
     wantedAccount = input("Which account are you looking for?: ")
-    #get_keyring()
 
-#5
+#5) Exit
 def bye():
     print("Bye for now!")
     exit()
-
-if userChoice == "1":
-    newPassword()
-
