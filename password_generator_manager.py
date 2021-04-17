@@ -2,15 +2,15 @@
 """
 Created on Wed Feb  3 22:05:42 2021
 
-@author: Marissa Murphy
+@author: mars2699
 """
 
 import random
 import csv
-from cryptography.fernet import Fernet
+#from cryptography.fernet import Fernet
 
 print ("Welcome to my password generator and manager!")
-userChoice = input("Press 1 to generate a password, press 2 to add a new account, press 3 to remove an account, press 4 to look up an existing account, or press 5 to exit: ")
+userChoice = input("Press 1 to generate a password, press 2 to add a new account, : ")
 
 #1) Generate a new password
 def newPassword():
@@ -18,7 +18,7 @@ def newPassword():
     lowercaseLetter2 = chr(random.randint(97,122)) 
     lowercaseLetter3 = chr(random.randint(97,122)) 
     lowercaseLetter4 = chr(random.randint(97,122)) 
-    lowercaseLetter5 = chr(random.randint(97,122))
+    uppercaseLetter5 = chr(random.randint(65,90))
     lowercaseLetter6 = chr(random.randint(97,122))
     lowercaseLetter7 = chr(random.randint(97,122))
     lowercaseLetter8 = chr(random.randint(97,122))
@@ -27,18 +27,21 @@ def newPassword():
     number11 = chr(random.randint(48,57))
     specCharacter = chr(random.randint(33,38))
 
-    passwordLinked = uppercaseLetter1 + lowercaseLetter2 + lowercaseLetter3 + lowercaseLetter4 + lowercaseLetter5 + lowercaseLetter6 + lowercaseLetter7 + lowercaseLetter8 + lowercaseLetter9 + lowercaseLetter10 + number11 + specCharacter   
+    passwordLinked = uppercaseLetter1 + lowercaseLetter2 + lowercaseLetter3 + lowercaseLetter4 + uppercaseLetter5 + lowercaseLetter6 + lowercaseLetter7 + lowercaseLetter8 + lowercaseLetter9 + lowercaseLetter10 + number11 + specCharacter   
     print('Your new password is: ',passwordLinked)
     
 #2) Create an entry for a new account and write it to a csv file
-#def addAccount():
-    #with open('my_account_list.csv', 'a') as f:
-        #w = csv.writer(f, quoting=csv.QUOTE_ALL) 
-    #while (1):
-        #account = input("Account Title: ")
-        #username = input("Username: ")
-        #password = input("Password: ")
-        #w.writerow([account, username, password])
+def addAccount():
+    with open('my_account_list.csv', 'a') as f:
+        w = csv.writer(f, quoting=csv.QUOTE_ALL) 
+        while (1):
+            account = input("Account Title: ")
+            username = input("Username: ")
+            password = input("Password: ")
+            w.writerow([account, username, password])
+            f.close()
+
+        
     
 # Encrypt this csv file
 # Use fernet to encrypt the user's data in a file. First generate a key.
@@ -101,3 +104,5 @@ def newPassword():
 
 if userChoice == "1":
     newPassword()
+if userChoice == "2":
+    addAccount()
