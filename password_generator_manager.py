@@ -7,7 +7,7 @@ Created on Wed Feb  3 22:05:42 2021
 
 import random
 import csv
-#from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet
 
 print ("Welcome to my password generator and manager!")
 userChoice = input("Press 1 to generate a password, 2 to add a new account, 3 to view existing info, or 4 to exit: ")
@@ -31,6 +31,14 @@ def newPassword():
     print('Your new password is: ',passwordLinked)
     
 #2) Create an entry for a new account and write it to a csv file
+def write_key():
+    key = Fernet.generate_key()
+    with open("key.key", "wb") as key_file:
+        key_file.write(key)
+        
+def load_key():
+    return open("key.key", "rb").read()
+
 def addAccount():
     with open('my_account_list.csv', 'a') as f:
         w = csv.writer(f, quoting=csv.QUOTE_ALL) 
@@ -40,14 +48,26 @@ def addAccount():
         password = input("Password: ")
         w.writerow([account, username, password])
         print('\nYour info has been saved successfully!')
-        # encrypt file here
+        
+        write_key()
+        key = load_key()
+        username.encode()
+        password.encode()
+        f = Fernet(key)
+        encryptedUsername = f.encrypt(username)
+        encryptedPassword = f.encrypt(password)
+        print(encryptedUsername)
+        print(encryptedPassword)
 
 #3) View an existing account so the user can see their info
 #def search():
-    # decrypt file here
+decrypted_encrypted1 = f.decrypt(encryptedUsername)
+decrypted_encrypted2 = f.decrypt(encryptedPassword)
+print(decrypted_encrypted1)
+print(decrypted_encrypted2)
     #wantedAccount = input("Which account are you looking for?: ")
 
-#4) Exit
+#4) Exit program
 #def bye():
    # print("Bye for now!")
    # exit()
@@ -57,4 +77,5 @@ def addAccount():
 if userChoice == "1":
     newPassword()
 if userChoice == "2":
+    load_key()
     addAccount()
