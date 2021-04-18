@@ -2,7 +2,7 @@
 """
 Created on Wed Feb  3 22:05:42 2021
 
-@author: mars2699
+@author: Marissa Murphy
 """
 
 import random
@@ -42,7 +42,6 @@ def loadKey():
 def addAccount():
     with open('my_account_list.csv', 'a') as f:
         w = csv.writer(f, quoting=csv.QUOTE_ALL) 
-        #while (1):
         account = input("Account Title: ")
         username = input("Username: ")
         password = input("Password: ")
@@ -65,9 +64,8 @@ def search():
     decrypted_encrypted2 = f.decrypt(encryptedPassword)
     print(decrypted_encrypted1)
     print(decrypted_encrypted2)
-    #wantedAccount = input("Which account are you looking for?: ")
     
-########################################################################   
+    #wantedAccount = input("Which account are you looking for?: ")
 
 if userChoice == "1":
     newPassword()
