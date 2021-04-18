@@ -10,7 +10,7 @@ import csv
 from cryptography.fernet import Fernet
 
 print ("Welcome to my password generator and manager!")
-userChoice = input("Press 1 to generate a password, 2 to add a new account, 3 to view existing info, or 4 to exit: ")
+userChoice = input("Press 1 to generate a password, 2 to add a new account, or 3 to view existing info: ")
 
 #1) Generate a new password
 def newPassword():
@@ -31,12 +31,12 @@ def newPassword():
     print('Your new password is: ',passwordLinked)
     
 #2) Create an entry for a new account and write it to a csv file
-def write_key():
+def makeKey():
     key = Fernet.generate_key()
     with open("key.key", "wb") as key_file:
         key_file.write(key)
         
-def load_key():
+def loadKey():
     return open("key.key", "rb").read()
 
 def addAccount():
@@ -49,8 +49,8 @@ def addAccount():
         w.writerow([account, username, password])
         print('\nYour info has been saved successfully!')
         
-        write_key()
-        key = load_key()
+        makeKey()
+        key = loadKey()
         username.encode()
         password.encode()
         f = Fernet(key)
@@ -60,22 +60,21 @@ def addAccount():
         print(encryptedPassword)
 
 #3) View an existing account so the user can see their info
-#def search():
-decrypted_encrypted1 = f.decrypt(encryptedUsername)
-decrypted_encrypted2 = f.decrypt(encryptedPassword)
-print(decrypted_encrypted1)
-print(decrypted_encrypted2)
+def search():
+    decrypted_encrypted1 = f.decrypt(encryptedUsername)
+    decrypted_encrypted2 = f.decrypt(encryptedPassword)
+    print(decrypted_encrypted1)
+    print(decrypted_encrypted2)
     #wantedAccount = input("Which account are you looking for?: ")
-
-#4) Exit program
-#def bye():
-   # print("Bye for now!")
-   # exit()
     
 ########################################################################   
 
 if userChoice == "1":
     newPassword()
 if userChoice == "2":
-    load_key()
+    loadKey()
     addAccount()
+if userChoice == "3":
+    search()
+else:
+    print('Invalid input. Please enter a number from 1-3 followed by the enter key.')
