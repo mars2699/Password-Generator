@@ -7,13 +7,17 @@ Created on Wed Feb  3 22:05:42 2021
 
 import random
 import csv
+import sys
 from cryptography.fernet import Fernet
+#from make_key import *
 
-print ("Welcome to my password generator and manager!")
-userChoice = input("Press 1 to generate a password, 2 to add a new account, or 3 to view existing info: ")
+# Please download make_key.py and my_account_list.csv before running
+
+print ("\nWelcome to my password generator and manager!")
+userChoice = input("Press 1 to generate a password, 2 to add a new account,\nor 3 to view existing info: ")
 
 #1) Generate a new password
-def newPassword():
+if userChoice == "1":
     uppercaseLetter1 = chr(random.randint(65,90))   
     lowercaseLetter2 = chr(random.randint(97,122)) 
     lowercaseLetter3 = chr(random.randint(97,122)) 
@@ -27,52 +31,39 @@ def newPassword():
     number11 = chr(random.randint(48,57))
     specCharacter = chr(random.randint(33,38))
 
-    passwordLinked = uppercaseLetter1 + lowercaseLetter2 + lowercaseLetter3 + lowercaseLetter4 + uppercaseLetter5 + lowercaseLetter6 + lowercaseLetter7 + lowercaseLetter8 + lowercaseLetter9 + lowercaseLetter10 + number11 + specCharacter   
-    print('Your new password is: ',passwordLinked)
+    passwordLinked = (uppercaseLetter1 + lowercaseLetter2 + lowercaseLetter3 + lowercaseLetter4 + 
+                      uppercaseLetter5 + lowercaseLetter6 + lowercaseLetter7 + lowercaseLetter8 + 
+                      lowercaseLetter9 + lowercaseLetter10 + number11 + specCharacter) 
+    
+    asAList = list(passwordLinked)
+    random.shuffle(asAList)
+    finalPassword = ''.join(asAList)
+    
+    print('\nYour new password is: ', finalPassword)
     
 #2) Create an entry for a new account and write it to a csv file
-def makeKey():
-    key = Fernet.generate_key()
-    with open("key.key", "wb") as key_file:
-        key_file.write(key)
-        
-def loadKey():
-    return open("key.key", "rb").read()
-
-def addAccount():
+if userChoice == "2":
     with open('my_account_list.csv', 'a') as f:
         w = csv.writer(f, quoting=csv.QUOTE_ALL) 
         account = input("Account Title: ")
         username = input("Username: ")
         password = input("Password: ")
         w.writerow([account, username, password])
-        print('\nYour info has been saved successfully!')
+        print('\nYour info has been saved successfully!') 
         
-        makeKey()
-        key = loadKey()
-        username.encode()
-        password.encode()
-        f = Fernet(key)
-        encryptedUsername = f.encrypt(username)
-        encryptedPassword = f.encrypt(password)
-        print(encryptedUsername)
-        print(encryptedPassword)
-
-#3) View an existing account so the user can see their info
-def search():
-    decrypted_encrypted1 = f.decrypt(encryptedUsername)
-    decrypted_encrypted2 = f.decrypt(encryptedPassword)
-    print(decrypted_encrypted1)
-    print(decrypted_encrypted2)
-    
-    #wantedAccount = input("Which account are you looking for?: ")
-
-if userChoice == "1":
-    newPassword()
-if userChoice == "2":
-    loadKey()
-    addAccount()
+        key = Fernet.generate_key()
+        fernet = Fernet(key)
+        encPassword = fernet.encrypt(password.encode())
+        print("original string: ", password)
+        print("encrypted string: ", encPassword)
+        
+#3) View existing info 
 if userChoice == "3":
-    search()
-else:
-    print('Invalid input. Please enter a number from 1-3 followed by the enter key.')
+    decPassword = fernet.decrypt(encPassword).decode()
+    
+    with open('my_account_list.csv', newline='') as csvfile:
+        infoReader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in infoReader:
+            print(', '.join(row))
+
+sys.exit()
